@@ -21,6 +21,10 @@ body{
   color:var(--ink);
   font:16px/1.65 var(--body);
   -webkit-font-smoothing:antialiased}
+#site-header{
+  position:sticky;
+  z-index:1000;
+  top:0}
 img,video{
   display:block;
   max-width:100%}
@@ -48,9 +52,9 @@ button,input,select,textarea{
   color:#8ab5e6;
   font-weight:600}
 .site-header{
-  position:sticky;
+  position:relative;
   z-index:20;
-  top:0;
+  top:auto;
   background:rgba(242,245,249,.94);
   backdrop-filter:blur(16px);
   border-bottom:1px solid rgba(20,39,61,.09)}
@@ -2279,7 +2283,7 @@ h2{font-size:clamp(1.7rem,7.4vw,2.3rem)!important;line-height:1.12}
     scroll-snap-type:x mandatory;
     scrollbar-width:none;
     padding:2px 2px 10px;
-    touch-action:pan-y;
+    touch-action:pan-x pan-y;
     -webkit-overflow-scrolling:touch}
   .has-slide-controls::-webkit-scrollbar{
     display:none}
@@ -2337,6 +2341,24 @@ h2{font-size:clamp(1.7rem,7.4vw,2.3rem)!important;line-height:1.12}
     flex-basis:86%!important}
 }
 @media(max-width:640px){
+  body[data-page="home"] .solution-grid.has-slide-controls{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    overflow:visible;
+    scroll-snap-type:none;
+    padding:0;
+    touch-action:auto;
+    -webkit-overflow-scrolling:auto}
+  body[data-page="home"] .solution-grid.has-slide-controls>*{
+    flex:initial!important;
+    scroll-snap-align:unset}
+  body[data-page="home"] .solution-grid.has-slide-controls+.slide-controls{
+    display:none}
+  body[data-page="home"] .solution-card,
+  body[data-page="home"] .solution-card:last-child{
+    grid-column:auto;
+    height:280px}
   body[data-page="home"] .explain-steps.has-slide-controls{
     display:grid!important;
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -2375,4 +2397,48 @@ h2{font-size:clamp(1.7rem,7.4vw,2.3rem)!important;line-height:1.12}
   body[data-page="home"] .service-grid{
     grid-template-columns:1fr!important;
     gap:12px}
+  body[data-page="products"] .product-catalog-grid.has-slide-controls,
+  body[data-page="filters"] .filter-stage-grid.has-slide-controls,
+  body[data-page="jobs"] .jobs-grid.has-slide-controls,
+  body[data-page="about"] .about-value-grid.has-slide-controls{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+    overflow:visible;
+    scroll-snap-type:none;
+    padding:0;
+    touch-action:auto;
+    -webkit-overflow-scrolling:auto}
+  body[data-page="products"] .scene-points.has-slide-controls,
+  body[data-page="filters"] .explain-steps.has-slide-controls{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    overflow:visible;
+    scroll-snap-type:none;
+    padding:0;
+    touch-action:auto;
+    -webkit-overflow-scrolling:auto}
+  body[data-page="products"] .product-catalog-grid.has-slide-controls>*,
+  body[data-page="products"] .scene-points.has-slide-controls>*,
+  body[data-page="filters"] .filter-stage-grid.has-slide-controls>*,
+  body[data-page="filters"] .explain-steps.has-slide-controls>*,
+  body[data-page="jobs"] .jobs-grid.has-slide-controls>*,
+  body[data-page="about"] .about-value-grid.has-slide-controls>*{
+    flex:initial!important;
+    scroll-snap-align:unset}
+  body[data-page="products"] .product-catalog-grid.has-slide-controls+.slide-controls,
+  body[data-page="products"] .scene-points.has-slide-controls+.slide-controls,
+  body[data-page="filters"] .filter-stage-grid.has-slide-controls+.slide-controls,
+  body[data-page="filters"] .explain-steps.has-slide-controls+.slide-controls,
+  body[data-page="jobs"] .jobs-grid.has-slide-controls+.slide-controls,
+  body[data-page="about"] .about-value-grid.has-slide-controls+.slide-controls{
+    display:none}
+  body[data-page="filters"] .explain-steps.has-slide-controls li{
+    min-width:0;
+    padding:14px 12px;
+    border-radius:14px;
+    font-size:12px}
+  body[data-page="filters"] .explain-steps.has-slide-controls li b{
+    font-size:13px}
 }
