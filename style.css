@@ -2336,3 +2336,43 @@ h2{font-size:clamp(1.7rem,7.4vw,2.3rem)!important;line-height:1.12}
   .has-slide-controls>*{
     flex-basis:86%!important}
 }
+@media(max-width:640px){
+  body[data-page="home"] .explain-steps.has-slide-controls{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px!important;
+    overflow:visible;
+    scroll-snap-type:none;
+    padding:0;
+    touch-action:auto;
+    -webkit-overflow-scrolling:auto}
+  body[data-page="home"] .service-grid.has-slide-controls{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    overflow:visible;
+    scroll-snap-type:none;
+    padding:0;
+    touch-action:auto;
+    -webkit-overflow-scrolling:auto}
+  body[data-page="home"] .explain-steps.has-slide-controls>*,
+  body[data-page="home"] .service-grid.has-slide-controls>*{
+    flex:initial!important;
+    scroll-snap-align:unset}
+  body[data-page="home"] .explain-steps.has-slide-controls+.slide-controls,
+  body[data-page="home"] .service-grid.has-slide-controls+.slide-controls{
+    display:none}
+  body[data-page="home"] .explain-steps{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px}
+  body[data-page="home"] .explain-steps li{
+    min-width:0;
+    padding:14px 12px;
+    border-radius:14px;
+    font-size:12px}
+  body[data-page="home"] .explain-steps li b{
+    font-size:13px}
+  body[data-page="home"] .service-grid{
+    grid-template-columns:1fr!important;
+    gap:12px}
+}

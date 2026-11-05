@@ -136,7 +136,10 @@ slideTracks.forEach(([selector, label]) => {
 
     const updateControls = () => {
       updateFrame = 0;
-      const carouselMode = matchMedia("(max-width: 1100px)").matches;
+      const phoneCardLayout = document.body.dataset.page === "home"
+        && [".service-grid", ".explain-steps"].includes(selector)
+        && matchMedia("(max-width: 640px)").matches;
+      const carouselMode = matchMedia("(max-width: 1100px)").matches && !phoneCardLayout;
       if (carouselMode) {
         track.setAttribute("aria-roledescription", "karusel");
       } else {
