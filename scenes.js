@@ -1,11 +1,11 @@
 (()=>{const tex=T=>{const k=document.createElement('canvas');k.width=k.height=64;const g=k.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'#fff');r.addColorStop(.4,'rgba(255,255,255,.5)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,64,64);return new T.CanvasTexture(k)};
-function stage(id,fit){const c=document.getElementById(id);if(!c||!window.THREE)return;const T=THREE,R=new T.WebGLRenderer({canvas:c,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+function stage(id,fit){const c=document.getElementById(id);if(!c||!window.THREE)return;const T=THREE,R=new T.WebGLRenderer({canvas:c,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,matchMedia('(max-width:760px)').matches?1:1.5));
 const S=new T.Scene(),cam=new T.PerspectiveCamera(40,1,.1,100),G=new T.Group(),box=c.parentElement,tx=tex(T);cam.position.set(0,.6,13);S.add(G,new T.AmbientLight(0x5c8cff,.8));
 [[-4,5,6,0x3da5ff,2.5],[6,-2,8,0xffffff,1.4]].forEach(a=>{const l=new T.PointLight(a[3],a[4],40);l.position.set(a[0],a[1],a[2]);S.add(l)});
 const size=()=>{const w=box.clientWidth,h=box.clientHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();G.scale.setScalar(Math.min(1,9.46*(w/h)*.92/fit))};size();addEventListener('resize',size);
-let vis=true;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(box);const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;let vis=true,raf=0,loop;new IntersectionObserver(([entry])=>{vis=entry.isIntersecting;if(vis&&!still&&!raf&&loop)raf=requestAnimationFrame(loop)}).observe(box);
 const pts=(n,size,color,add)=>{const g=new T.BufferGeometry(),p=new Float32Array(n*3);g.setAttribute('position',new T.BufferAttribute(p,3));G.add(new T.Points(g,new T.PointsMaterial({size,color,map:tx,transparent:true,depthWrite:false,blending:add?T.AdditiveBlending:T.NormalBlending})));return{p,up:()=>g.attributes.position.needsUpdate=true}};
-const run=f=>{const loop=t=>{if(vis){f(t/1000);R.render(S,cam)}if(!still)requestAnimationFrame(loop)};still?(f(3),R.render(S,cam)):loop(0)};
+const run=f=>{loop=t=>{raf=0;if(vis){f(t/1000);R.render(S,cam)}if(!still&&vis)raf=requestAnimationFrame(loop)};if(still){f(3);R.render(S,cam)}else if(vis)raf=requestAnimationFrame(loop)};
 const M=o=>new T.MeshStandardMaterial(o);return{T,G,pts,run,M}}
 addEventListener('load',()=>{
 let s=stage('soft3d',17);if(s){const{T,G,pts,run,M}=s;
@@ -19,9 +19,9 @@ const beads=pts(280,.16,0x2f8cff),sc=pts(150,.26,0xf4ecd4),cl=pts(170,.2,0x9fe3f
 const rq=q=>{q.x=-8+Math.random()*.5;q.t=null;q.a=Math.random()*6.28;q.r=Math.random()*.2;q.y=Math.cos(q.a)*q.r;q.z=Math.sin(q.a)*q.r};
 for(let i=0;i<150;i++){const q={v:.03+Math.random()*.02};rq(q);q.x=-8+Math.random()*6.4;Q.push(q)}
 for(let i=0;i<170;i++)C.push({x:1.6+Math.random()*6.4,v:.03+Math.random()*.02,a:Math.random()*6.28,r:Math.random()*.2});
-run(t=>{B.forEach((b,i)=>beads.p.set([b[0]+Math.sin(t*2+i)*.04,b[1]+Math.cos(t*1.7+i)*.04,b[2]],i*3));
-Q.forEach((q,i)=>{if(!q.t){q.x+=q.v;if(q.x>-1.6)q.t=B[(Math.random()*280)|0]}else{const d=[q.t[0]-q.x,q.t[1]-q.y,q.t[2]-q.z];q.x+=d[0]*.06;q.y+=d[1]*.06;q.z+=d[2]*.06;if(Math.abs(d[0])+Math.abs(d[1])<.25)rq(q)}sc.p.set([q.x,q.y,q.z],i*3)});
-C.forEach((c,i)=>{c.x+=c.v;if(c.x>8)c.x=1.6;cl.p.set([c.x,Math.cos(c.a)*c.r,Math.sin(c.a)*c.r],i*3)});[beads,sc,cl].forEach(o=>o.up());G.rotation.y=Math.sin(t*.3)*.25})}
+run(t=>{B.forEach((b,i)=>{const j=i*3;beads.p[j]=b[0]+Math.sin(t*2+i)*.04;beads.p[j+1]=b[1]+Math.cos(t*1.7+i)*.04;beads.p[j+2]=b[2]});
+Q.forEach((q,i)=>{if(!q.t){q.x+=q.v;if(q.x>-1.6)q.t=B[(Math.random()*280)|0]}else{const dx=q.t[0]-q.x,dy=q.t[1]-q.y,dz=q.t[2]-q.z;q.x+=dx*.06;q.y+=dy*.06;q.z+=dz*.06;if(Math.abs(dx)+Math.abs(dy)<.25)rq(q)}const j=i*3;sc.p[j]=q.x;sc.p[j+1]=q.y;sc.p[j+2]=q.z});
+C.forEach((c,i)=>{c.x+=c.v;if(c.x>8)c.x=1.6;const j=i*3;cl.p[j]=c.x;cl.p[j+1]=Math.cos(c.a)*c.r;cl.p[j+2]=Math.sin(c.a)*c.r});[beads,sc,cl].forEach(o=>o.up());G.rotation.y=Math.sin(t*.3)*.25})}
 s=stage('compare3d',15);if(s){const{T,G,pts,run,M}=s;
 const bm=M({color:0x7fc8ff,transparent:true,opacity:.5,metalness:.2,roughness:.1}),cm=M({color:0x1e6bff}),bs=[],rest=[];
 for(let r=0;r<4;r++)for(let c=0;c<4-r;c++)rest.push([-5.6+(c+r*.5)*1.15,-2.1+r*1.75]);
@@ -36,7 +36,7 @@ mesh(new T.CylinderGeometry(.62,.55,1.8,32,1,true),M({color:0xbfe6ff,transparent
 const wg=new T.CylinderGeometry(.55,.5,1.7,32);wg.translate(0,.85,0);const w=mesh(wg,M({color:0x4cc3ff,emissive:0x1e6bff,emissiveIntensity:.6,transparent:true,opacity:.8}),2.4,-2.4);
 const st=pts(90,.12,0x9fe3ff,true),sp=[];for(let i=0;i<90;i++)sp.push(Math.random());
 run(t=>{const tt=t%10.5;bs.forEach((g,i)=>{const d=tt-i*.55,f=Math.max(0,1-d/.8);g.position.y=d<0?20:rest[i][1]+7*f*f;g.rotation.y=t*.2});
-mx.forEach((m,i)=>mp.p.set([m[0]+Math.sin(t+m[2])*.25,m[1]+Math.cos(t*.8+m[2])*.25,Math.sin(t*.5+m[2])*.5],i*3));
+mx.forEach((m,i)=>{const j=i*3;mp.p[j]=m[0]+Math.sin(t+m[2])*.25;mp.p[j+1]=m[1]+Math.cos(t*.8+m[2])*.25;mp.p[j+2]=Math.sin(t*.5+m[2])*.5});
 const lv=Math.min(1,(t%6)/6*1.2);w.scale.y=.05+.95*lv;const top=-2.4+1.7*w.scale.y;
-sp.forEach((v,i)=>{sp[i]=(v+.012)%1;st.p.set([2.4+Math.sin(i)*.05,1.3-(1.3-top)*sp[i],Math.cos(i)*.05],i*3)});mp.up();st.up()})}
+sp.forEach((v,i)=>{sp[i]=(v+.012)%1;const j=i*3;st.p[j]=2.4+Math.sin(i)*.05;st.p[j+1]=1.3-(1.3-top)*sp[i];st.p[j+2]=Math.cos(i)*.05});mp.up();st.up()})}
 })})();

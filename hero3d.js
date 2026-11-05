@@ -1,5 +1,5 @@
 function init(c,ex){const T=THREE,hero=c.parentElement;
-const R=new T.WebGLRenderer({canvas:c,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+const R=new T.WebGLRenderer({canvas:c,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,matchMedia('(max-width:760px)').matches?1:1.5));
 const S=new T.Scene(),cam=new T.PerspectiveCamera(40,1,.1,100);cam.position.set(0,1,13);
 S.add(new T.AmbientLight(0x5c8cff,.7));[[-4,5,6,0x3da5ff,2.5],[6,-2,8,0xffffff,1.4]].forEach(a=>{const l=new T.PointLight(a[3],a[4],40);l.position.set(a[0],a[1],a[2]);S.add(l)});
 const G=new T.Group();S.add(G);const X=[-5.4,-1.8,1.8,5.4],col=[0x9a7440,0x1b2433,0x2f8cff,0x9fe3ff];
@@ -18,17 +18,17 @@ for(let i=0;i<clean.n;i++)rs(clean,i,-9.5+Math.random()*19);
 for(let i=0;i<dirt.n;i++){rs(dirt,i,-9.5+Math.random()*7);dirt.d[i]=[-4.4,-.8,2.8][i%3]}
 const dc=new T.Color(0x9a7440),a=new T.Color(0x2f8cff),b=new T.Color(0xbff0ff),tmp=new T.Color();
 function size(){const w=hero.clientWidth,h=hero.clientHeight,as=w/h;R.setSize(w,h,false);cam.aspect=as;cam.updateProjectionMatrix();
-if(ex){G.scale.setScalar(Math.min(.95,9.46*as*.95/19));G.position.set(0,0,0)}else{const hw=4.73*as;if(as>1.1){G.scale.setScalar(Math.min(.6,.475*hw/9.5));G.position.set(.495*hw,0,0)}else{G.scale.setScalar(9.46*as*.92/19);G.position.set(0,2.5,0)}}}
+if(ex){G.scale.setScalar(Math.min(.95,9.46*as*.95/19));G.position.set(0,0,0)}else{const hw=4.73*as;if(as>1.1){G.scale.setScalar(Math.min(.6,.475*hw/9.5));G.position.set(.495*hw,0,0)}else if(innerWidth<=760){G.scale.setScalar(Math.max(.3,9.46*as*.92/19));G.position.set(0,3.2,0)}else{G.scale.setScalar(9.46*as*.92/19);G.position.set(0,2.5,0)}}}
 size();addEventListener('resize',size);let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
-const still=matchMedia('(prefers-reduced-motion: reduce)').matches;let vis=true;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(hero);
-function tick(t){if(vis){const s=t*.001;
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;let vis=true,raf=0;new IntersectionObserver(([entry])=>{vis=entry.isIntersecting;if(vis&&!still&&!raf)raf=requestAnimationFrame(tick)}).observe(hero);
+function tick(t){raf=0;if(vis){const s=t*.001;
 for(let i=0;i<clean.n;i++){clean.p[i*3]+=clean.v[i];if(clean.p[i*3]>9.5)rs(clean,i,-9.5);const x=clean.p[i*3],k=Math.min(1,Math.max(0,(x+9)/18));
-tmp.copy(dc).lerp(a,Math.min(1,k*2.2)).lerp(b,Math.max(0,k*1.6-.6));clean.cl.set([tmp.r,tmp.g,tmp.b],i*3)}
-for(let i=0;i<dirt.n;i++){const j=i*3;dirt.p[j]+=dirt.v[i];if(dirt.p[j]>dirt.d[i]){dirt.p[j+1]-=.06;if(dirt.p[j+1]<-1.8)rs(dirt,i,-9.5)}dirt.cl.set([.45,.32,.16],j)}
+tmp.copy(dc).lerp(a,Math.min(1,k*2.2)).lerp(b,Math.max(0,k*1.6-.6));clean.cl[i*3]=tmp.r;clean.cl[i*3+1]=tmp.g;clean.cl[i*3+2]=tmp.b}
+for(let i=0;i<dirt.n;i++){const j=i*3;dirt.p[j]+=dirt.v[i];if(dirt.p[j]>dirt.d[i]){dirt.p[j+1]-=.06;if(dirt.p[j+1]<-1.8)rs(dirt,i,-9.5)}dirt.cl[j]=.45;dirt.cl[j+1]=.32;dirt.cl[j+2]=.16}
 [clean,dirt].forEach(o=>{o.g.attributes.position.needsUpdate=o.g.attributes.color.needsUpdate=true});
 if(!still){G.rotation.y=Math.sin(s*.35)*.3+mx*.3;G.rotation.x=.12+my*.15}
 if(ex){const k=Math.floor(s/2.6)%4;cores.forEach((m,i)=>{m.material.emissiveIntensity=i==k?1.6:.25;m.material.opacity=i==k?.75:.35;rings[i].scale.setScalar(i==k?1.12:1)});if(k!=last){last=k;document.querySelectorAll('.explain-steps li').forEach((li,i)=>li.classList.toggle('on',i==k))}}
 R.render(S,cam)}
-if(!still)requestAnimationFrame(tick)}
+if(!still&&vis)raf=requestAnimationFrame(tick)}
 tick(0)}
 addEventListener('load',()=>{if(!window.THREE)return;[['hero3d',0],['explain3d',1]].forEach(([i,e])=>{const c=document.getElementById(i);c&&init(c,e)})});
