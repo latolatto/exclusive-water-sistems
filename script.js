@@ -12,6 +12,8 @@ const navItems = [
   ["contact", "Kontakt", "kontakt.html"]
 ];
 
+
+
 const whatsappIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4a9.4 9.4 0 0 0-8.1 14.2L2.7 21l4.6-1.2A9.4 9.4 0 1 0 12 2.4Zm0 16.9a7.5 7.5 0 0 1-3.8-1l-.3-.2-2.7.7.7-2.6-.2-.3a7.5 7.5 0 1 1 6.3 3.4Zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7-.2-.1-.4-.1-.5.1-.2.2-.6.7-.8.9-.1.1-.3.2-.5.1-.2-.1-.9-.3-1.8-1.1-.7-.6-1.1-1.3-1.3-1.5-.1-.2 0-.4.1-.5l.4-.4.2-.4c.1-.1 0-.3 0-.4s-.5-1.2-.7-1.6c-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.3c.1.2 1.6 2.4 3.8 3.3.5.2.9.4 1.2.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.2-.4-.3Z"/></svg>`;
 const instagramIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2.8h9.6a4.4 4.4 0 0 1 4.4 4.4v9.6a4.4 4.4 0 0 1-4.4 4.4H7.2a4.4 4.4 0 0 1-4.4-4.4V7.2a4.4 4.4 0 0 1 4.4-4.4Zm0 1.9a2.5 2.5 0 0 0-2.5 2.5v9.6a2.5 2.5 0 0 0 2.5 2.5h9.6a2.5 2.5 0 0 0 2.5-2.5V7.2a2.5 2.5 0 0 0-2.5-2.5H7.2Zm4.8 2.5a4.8 4.8 0 1 1 0 9.6 4.8 4.8 0 0 1 0-9.6Zm0 1.9a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8Zm5-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg>`;
 const socialLinks = `<a class="top-social" href="https://wa.me/${phone}" target="_blank" rel="noreferrer" aria-label="WhatsApp">${whatsappIcon}</a><a class="top-social" href="${instagramUrl}" target="_blank" rel="noreferrer" aria-label="Instagram">${instagramIcon}</a><a class="top-social google-icon" href="${googleUrl}" target="_blank" rel="noreferrer" aria-label="Profili në Google">G</a><a class="top-social facebook-icon" href="${facebookUrl}" target="_blank" rel="noreferrer" aria-label="Facebook">f</a>`;
